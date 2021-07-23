@@ -22,7 +22,7 @@
       <!-- Nombre -->
       <div class="mb-3">
         <label class="form-label">Nombre y Apellidos</label>
-        <input type="text" class="form-control" id="input-name"  name="input-name" required value="Marlon">
+        <input type="text" class="form-control" id="input-name"  name="input-name" required value="<?php echo "Marlon" ?>">
       </div>
       <!-- Telefono -->
       <div class="mb-3">
@@ -68,15 +68,38 @@
           echo "El nombre es:".$input_name;
 
           // Paso 2 - Datos de conexión Odoo
-          $url = "localhost:8069";
-          $db = "db14-credit";
-          $username = "admin";
-          $password = "x1234567890";
+          $url = 'http://localhost:8069';
+          $url_auth = $url . '/xmlrpc/2/common';
+          $url_exec = $url . '/xmlrpc/2/object';
+          $db = 'db14-credit';
+          $username = 'admin';
+          $password = 'x1234567890';
 
-          // Paso 3 - Nos conectamos
-          use Ripoo\OdooClient;
+          // Paso 4 - Requerimos la libreria
+          // Ripcord puedes clonarlo en https://github.com/poef/ripcord
+          require_once('ripcord/ripcord.php');
 
+          // Paso 5 - Hacemos Login
+          $common = ripcord::client($url_auth);
+          $uid = $common->authenticate($db, $username, $password, array());
+          echo("<p>Your current user id is '${uid}'</p>");
+          $models = ripcord::client($url_exec);
 
+          // Paso 6 - Insertamos el registro
+          $new_partner_id = $models->execute_kw($db, $uid, $password,
+              'crm.lead',
+              'create', // Function name
+              array( // Values-array
+                  array( // First record
+                      'name'=>$input_name,
+                      'email_from'=>$input_email,
+                      'mobile'=>$input_phone,
+                      'description'=>$comentario,
+                      'city'=>$ciudad,
+                  )
+              )
+          );
+          
         } else {
           echo "Sin Datos";
         }
