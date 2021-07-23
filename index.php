@@ -86,7 +86,7 @@
           $models = ripcord::client($url_exec);
 
           // Paso 6 - Insertamos el registro
-          $new_partner_id = $models->execute_kw($db, $uid, $password,
+          $new_lead_id = $models->execute_kw($db, $uid, $password,
               'crm.lead',
               'create', // Function name
               array( // Values-array
