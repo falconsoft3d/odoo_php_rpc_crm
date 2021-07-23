@@ -12,13 +12,13 @@
 
 <!-- FORMULARIO -->
 <div class="container">
-  <a href="crm.php"><h1>ODOO CRM</h1></a>
+  <a href="index.php"><h1>ODOO CRM</h1></a>
   <?php
-      echo 'Current PHP Version: ' .  phpversion();
+      echo '<h3>Current PHP Version: ' .  phpversion() . '</h3>';
     ?>
     
   <div class="row">
-    <form name="frmContacto" method="get" action="crm.php" role="form">
+    <form name="frmContacto" method="get" action="index.php" role="form">
       <!-- Nombre -->
       <div class="mb-3">
         <label class="form-label">Nombre y Apellidos</label>
@@ -57,6 +57,7 @@
 
     
     <?php
+        // Paso 1 - Cargamos los datos via GET
         $input_name = $_GET['input-name'];
         $input_email = $_GET['input-email'];
         $input_phone = $_GET['input-phone'];
@@ -65,6 +66,17 @@
         
         if ($input_name) {
           echo "El nombre es:".$input_name;
+
+          // Paso 2 - Datos de conexión Odoo
+          $url = "localhost:8069";
+          $db = "db14-credit";
+          $username = "admin";
+          $password = "x1234567890";
+
+          // Paso 3 - Nos conectamos
+          use Ripoo\OdooClient;
+
+
         } else {
           echo "Sin Datos";
         }
